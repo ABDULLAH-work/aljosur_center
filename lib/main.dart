@@ -1,4 +1,4 @@
-
+import 'package:aljosur_center/Layout/aljosur_layout.dart';
 import 'package:aljosur_center/shared/login_cubit/cubit.dart';
 import 'package:aljosur_center/shared/simple_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,13 +32,12 @@ Future<void> main() async {
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
+  late Widget start;
 
 
   // await cachHelper.init();
   // dynamic onBoardingFinish = false;
   // onBoardingFinish = cachHelper.getData('ShowOnBoard');
-  //
-  // late Widget start;
   // uId = cachHelper.getData('uId');
   // stateUser=cachHelper.getData('state');
   //
@@ -57,6 +56,7 @@ Future<void> main() async {
   // } else {
   //   start = OnBording_Screen();
   // }
+  start=AljosurLayout();
 
   BlocOverrides.runZoned(
         () {
