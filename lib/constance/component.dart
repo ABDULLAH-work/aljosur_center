@@ -1,23 +1,25 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 void PushToNextScreen(context, wight) => Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => wight),
     );
 
-// void showToast(msg) {
-//   Fluttertoast.showToast(
-//       msg: msg,
-//       toastLength: Toast.LENGTH_LONG,
-//       gravity: ToastGravity.BOTTOM,
-//       timeInSecForIosWeb: 5,
-//       backgroundColor: Colors.red,
-//       textColor: Colors.white,
-//       fontSize: 16.0);
-// }
+void showToast(msg) {
+  Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 5,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0);
+}
 
-void NavegatandFinish(context, Widget widget) => Navigator.pushAndRemoveUntil(
+void navigatorAndFinish(context, Widget widget) => Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => widget),
       (Route<dynamic> route) => false,
@@ -53,13 +55,13 @@ Widget bottom({
           ),
         ),
       ),
-    );Widget customBottom({
+    );
+Widget customBottom({
   required double width,
   required double height,
   required Color color,
   required VoidCallback? onPressed,
   required Widget widget,
-  required Color Colortext,
   required Color borderColor,
 }) =>
     Container(
@@ -105,13 +107,13 @@ Widget defulteditTextx({
       validator: validator,
       decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        // contentPadding: EdgeInsets.zero,
-        labelStyle: TextStyle(fontWeight: FontWeight.w500,fontSize: 22, color: Colors.red,),
+        labelStyle: TextStyle(fontWeight: FontWeight.w500,fontSize: 22, color: HexColor('#F15A22'),),
         labelText: Lable,
+        icon: Icon(prefix,color: HexColor('#050640'),),
+
         hintText: hint,
         hintStyle: TextStyle(fontSize: 11.5),
         // border: InputBorder.none,
-
         suffixIcon: sufix != null
             ? IconButton(onPressed: suffixPressed, icon: Icon(sufix))
             : null,
@@ -125,36 +127,6 @@ Widget defulteditTextx({
         //fillColor: Colors.grey[200],
       ),
     );
-
-// Widget buildCategoriesItem(Data model, context) {
-//   return InkWell(
-//     onTap: () {
-//       ShopAppcubit.get(context).getCategoriesDetailData(model.id);
-//       PushToNextScreen(context, CategoryProductsScreen(model.name));
-//     },
-//     child: Container(
-//       padding: const EdgeInsets.all(15),
-//       child: Row(
-//         children: [
-//           Image(
-//             image: NetworkImage('${model.image}'),
-//             width: 100,
-//             height: 100,
-//           ),
-//           const SizedBox(
-//             height: 20.0,
-//           ),
-//           Text(
-//             '${model.name}',
-//             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-//           ),
-//           const Spacer(),
-//           const Icon(Icons.arrow_forward_ios_rounded),
-//         ],
-//       ),
-//     ),
-//   );
-// }
 
 Widget separator(double wide, double high) {
   return SizedBox(

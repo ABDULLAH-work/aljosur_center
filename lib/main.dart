@@ -1,11 +1,17 @@
 import 'package:aljosur_center/Layout/aljosur_layout.dart';
+import 'package:aljosur_center/constance/constants.dart';
+import 'package:aljosur_center/modules/authentication/login/login_screen.dart';
+import 'package:aljosur_center/shared/cubit_app/cubit.dart';
 import 'package:aljosur_center/shared/login_cubit/cubit.dart';
+import 'package:aljosur_center/shared/register_cubit/cubit.dart';
 import 'package:aljosur_center/shared/simple_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:aljosur_center/remote/cach_helper.dart';
+
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
@@ -15,50 +21,32 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
- // token=await FirebaseMessaging.instance.getToken();
-  //print(token);
-
-  FirebaseMessaging.onMessage.listen((event)
-  {
-    print(event.data.toString());
-  });
-
-  FirebaseMessaging.onMessageOpenedApp.listen((event)
-  {
-    print(event.data.toString());
-  });
-
-
-
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-  late Widget start;
-
-
-  // await cachHelper.init();
-  // dynamic onBoardingFinish = false;
-  // onBoardingFinish = cachHelper.getData('ShowOnBoard');
-  // uId = cachHelper.getData('uId');
-  // stateUser=cachHelper.getData('state');
+  token=await FirebaseMessaging.instance.getToken();
+  print(token);
+  await cachHelper.init();
+  // FirebaseMessaging.onMessage.listen((event)
+  // {
+  //   print(event.data.toString());
+  // });
   //
-  // print(uId);
-  // if (onBoardingFinish != null) {
-  //   if (uId == null) {
-  //     start = SalonOrServicesOrUser();
-  //   }
-  //   else if(stateUser=='user')
-  //   {
-  //     start = AzyanLayout();
-  //   }
-  //   else {
-  //     start=SalonDashboardScreen();
-  //   }
-  // } else {
-  //   start = OnBording_Screen();
-  // }
-  start=AljosurLayout();
+  // FirebaseMessaging.onMessageOpenedApp.listen((event)
+  // {
+  //   print(event.data.toString());
+  // });
 
-  BlocOverrides.runZoned(
+   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+late Widget start;
+   uId = cachHelper.getData('uId');
+   print(uId);
+
+     if(uId==null)
+    {
+      start = LoginScreen();
+    }
+    else {
+      start=AljosurLayout();
+    }
+    BlocOverrides.runZoned(
         () {
       runApp(MyApp(start));
     },
@@ -77,23 +65,30 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => LoginCubit(),
+        ),BlocProvider(
+          create: (context) => AppCubit(),
+        ),BlocProvider(
+          create: (context) => RegisterCubit(),
         ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Azyan',
+        title: 'JusoorOnline',
         theme: ThemeData(
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: HexColor('#050640'),
+            selectedItemColor: HexColor('#F15A22'),
+            unselectedItemColor: Colors.white ,
+          ),
           fontFamily: 'IBM',
           buttonTheme: ButtonThemeData(buttonColor: HexColor('#EB4043')),
-          scaffoldBackgroundColor: HexColor("#FFEBED"),
-          appBarTheme:AppBarTheme(backgroundColor:HexColor("#FFEBED"), ),
-          primarySwatch: Colors.red,
-          bottomSheetTheme: BottomSheetThemeData(
-            backgroundColor: HexColor("#FFEBED"),
-          ),
+          appBarTheme:AppBarTheme(backgroundColor:HexColor("#050640"), ),
+          primarySwatch: Colors.orange,
         ),
         home: startApp,
       ),
     );
   }
 }
+//#050640 blue
+//#F15A22 orange
