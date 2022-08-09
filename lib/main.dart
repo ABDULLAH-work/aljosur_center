@@ -1,6 +1,8 @@
 import 'package:aljosur_center/Layout/aljosur_layout.dart';
 import 'package:aljosur_center/constance/constants.dart';
 import 'package:aljosur_center/modules/authentication/login/login_screen.dart';
+import 'package:aljosur_center/shared/add_course_cubit/cubit.dart';
+import 'package:aljosur_center/shared/admin_cubit/cubit.dart';
 import 'package:aljosur_center/shared/cubit_app/cubit.dart';
 import 'package:aljosur_center/shared/login_cubit/cubit.dart';
 import 'package:aljosur_center/shared/register_cubit/cubit.dart';
@@ -66,9 +68,13 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => LoginCubit(),
         ),BlocProvider(
-          create: (context) => AppCubit(),
+          create: (context) => AppCubit()..getcourseData()..getUserData(),
         ),BlocProvider(
           create: (context) => RegisterCubit(),
+        ),BlocProvider(
+          create: (context) => AdminCubit(),
+        ),BlocProvider(
+          create: (context) => AddCoursesCubit(),
         ),
       ],
       child: MaterialApp(

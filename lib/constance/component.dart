@@ -17,6 +17,15 @@ void showToast(msg) {
       backgroundColor: Colors.red,
       textColor: Colors.white,
       fontSize: 16.0);
+}void showToastSuccess(msg) {
+  Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 5,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 16.0);
 }
 
 void navigatorAndFinish(context, Widget widget) => Navigator.pushAndRemoveUntil(

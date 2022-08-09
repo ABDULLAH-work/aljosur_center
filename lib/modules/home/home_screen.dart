@@ -1,58 +1,70 @@
+import 'package:aljosur_center/constance/component.dart';
+import 'package:aljosur_center/model/add_course_model.dart';
+import 'package:aljosur_center/modules/details_course/detail_cours_screen.dart';
+import 'package:aljosur_center/shared/cubit_app/cubit.dart';
+import 'package:aljosur_center/shared/cubit_app/states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.separated(
-            physics: BouncingScrollPhysics(),itemBuilder: (context, index) {
-          return buildCourses();
-        }, separatorBuilder: (context, index) {
-         return SizedBox(
-            height: 20.0,
-          );
-        }, itemCount: 10),
-      ),
+    return BlocConsumer<AppCubit,AppStates>(
+      builder: (context, state) {
+        return  Scaffold(
+          backgroundColor: Colors.white,
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.separated(
+                physics: const BouncingScrollPhysics(),itemBuilder: (context, index) {
+              return buildCourses(AppCubit.get(context).coursesModel[index],context,AppCubit.get(context).idCoursesModel,index);
+            }, separatorBuilder: (context, index) {
+              return const SizedBox(
+                height: 20.0,
+              );
+            }, itemCount:AppCubit.get(context).coursesModel.length),
+          ),
+        );
+      },
+      listener: (context, state) {
+
+      },
     );
   }
 }
-Widget buildCourses(){
+Widget buildCourses(AddCourseModel model,context,id,index){
   return   InkWell(
     child: Container(
       width: double.infinity,
       height: 300.0,
       decoration: BoxDecoration(
-
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
             image: NetworkImage(
-              'https://i0.wp.com/jusooronline.com/wp-content/uploads/2022/07/%D9%85%D8%AC%D8%A7%D9%86%D9%8A%D8%A9.jpg?w=1000&ssl=1',
+              model.image!,
             ),
             fit: BoxFit.fill),
       ),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 200.0,
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsetsDirectional.all(10.0),
+              padding: const EdgeInsetsDirectional.all(10.0),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
+                borderRadius:const BorderRadius.only(
                     bottomRight: Radius.circular(15),
                     bottomLeft: Radius.circular(15)),
                 color: Colors.black.withOpacity(0.7),
               ),
               width: double.infinity,
               child: Text(
-                'دورة كيف تبدأ عملاً ناجحا على الانترنت',
-                style: TextStyle(
+                model.nameCourse!,
+                style:const TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold),
@@ -62,6 +74,12 @@ Widget buildCourses(){
         ],
       ),
     ),
-    onTap: (){},
+    onTap: (){
+
+      PushToNextScreen(context,DetailCourseScreen(model: model,id: id[index]));
+
+      print(id[index]);
+    },
   );
+
 }

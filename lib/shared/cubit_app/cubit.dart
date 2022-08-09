@@ -1,12 +1,19 @@
+import 'dart:io';
+
 import 'package:aljosur_center/constance/component.dart';
 import 'package:aljosur_center/constance/constants.dart';
+import 'package:aljosur_center/model/add_course_model.dart';
+import 'package:aljosur_center/model/user_model.dart';
 import 'package:aljosur_center/modules/authentication/login/login_screen.dart';
 import 'package:aljosur_center/modules/home/home_screen.dart';
 import 'package:aljosur_center/modules/my_courses/my_courses_screen.dart';
 import 'package:aljosur_center/shared/cubit_app/states.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:aljosur_center/remote/cach_helper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../../modules/my_account/my_account_screen.dart';
 
 class AppCubit extends Cubit<AppStates> {
@@ -41,5 +48,92 @@ class AppCubit extends Cubit<AppStates> {
       navigatorAndFinish(context, LoginScreen());
       emit(AppCubitLogOutState());
    }
+
+
+
+   List<AddCourseModel> coursesModel = [];
+   List<String> idCoursesModel = [];
+
+   void getcourseData() {
+      emit(AppCubitGetCourseLoadingState());
+      FirebaseFirestore.instance
+          .collection('Courses')
+          .get()
+          .then((value) {
+         value.docs.forEach((element) {
+            coursesModel.add(AddCourseModel.fromJson(element.data()));
+            idCoursesModel.add(element.id);
+         });
+         emit(AppCubitGetCourseSuccessState());
+      }).catchError(
+             (error) {
+            print(error.toString());
+            emit(AppCubitGetCourseErrorState());
+         },
+      );
+   }
+
+
+   UserModel userModel = UserModel();
+
+   void getUserData()
+   {
+      emit(AppCubitGetUserLoadingState());
+      FirebaseFirestore.instance
+          .collection('users').doc(uId)
+          .get()
+          .then((value) {
+            userModel=UserModel.fromJson(value.data()!);
+         emit(AppCubitGetUserSuccessState());
+      }).catchError(
+             (error) {
+            print(error.toString());
+            emit(AppCubitGetUserErrorState());
+         },
+      );
+   }
+
+
+   File? PaymentImage;
+
+   final picker = ImagePicker();
+
+   Future getPaymentImage() async {
+      final pikedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pikedFile != null) {
+         PaymentImage = File(pikedFile.path);
+         emit(AppCubitPaymentImagePickedSuccessState());
+      } else {
+         print('No image selected');
+         emit(AppCubitPaymentImagePickedErrorState());
+      }
+   }
+
+   String PaymentImageUrl = '';
+
+   void uploadPaymentImage() {
+      firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child(
+         'Payments/${Uri.file(PaymentImage!.path).pathSegments.last}',
+      )
+          .putFile(PaymentImage!)
+          .then((value) {
+         value.ref.getDownloadURL().then((value) {
+            PaymentImageUrl = value;
+            emit(AppCubitPaymentUploadImageSuccessState());
+            print(value);
+         }).catchError((error) {
+            emit(AppCubitPaymentUploadImageErrorState());
+            print(error.toString());
+            print('error 1');
+         });
+      }).catchError((error) {
+         emit(AppCubitPaymentUploadImageErrorState());
+         print('error 2');
+      });
+   }
+
+
 
 }
