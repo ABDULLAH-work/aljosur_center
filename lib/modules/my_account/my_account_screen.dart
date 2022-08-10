@@ -15,63 +15,81 @@ class MyAccountScreen extends StatelessWidget {
           var model = AppCubit.get(context).userModel;
           return Scaffold(
             backgroundColor: Colors.white,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Center(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 90.0,
-                    backgroundImage: NetworkImage('${model.image}'),
+            body: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10.0,
                   ),
-                ),
-              const   SizedBox(
-                  height: 20.0,
-                ),
-                Center(
-                  child: Text(
-                    model.name.toString(),
-                    style:const TextStyle(
-                      fontWeight: FontWeight.bold,
+                  Center(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 90.0,
+                      backgroundImage: NetworkImage('${model.image}',),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Container(
-                  padding: const EdgeInsetsDirectional.all(10.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                    10.0,
-                  )),
-                  child: Align(
-                    alignment: Alignment.topLeft,
+                const   SizedBox(
+                    height: 20.0,
+                  ),
+                  Center(
                     child: Text(
-                      model.email.toString(),
+                      model.name.toString(),
+                      style:const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-               const  SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                  padding: const EdgeInsetsDirectional.all(10.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                    10.0,
-                  )),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      model.phone.toString(),
-                    ),
+                  const SizedBox(
+                    height: 20.0,
                   ),
-                ),
-              ],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      Text('البريد الإلكتروني'),
+                      SizedBox(height: 10.0),
+                      Container(
+                        padding: const EdgeInsetsDirectional.all(10.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+
+                            border: Border.all(color: Colors.orange)
+                        ),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            model.email.toString(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                 const  SizedBox(
+                    height: 10.0,
+                  ),
+                  Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('رقم الهاتف'),
+                      SizedBox(height: 10.0),
+                      Container(
+                        padding: const EdgeInsetsDirectional.all(10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(color: Colors.orange)
+                        ),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            model.phone.toString(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },

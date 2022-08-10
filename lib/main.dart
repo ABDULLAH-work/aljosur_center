@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => LoginCubit(),
         ),BlocProvider(
-          create: (context) => AppCubit()..getcourseData()..getUserData(),
+          create: (context) => AppCubit()..getCourseData()..getUserData()..getMyBookCourseData(),
         ),BlocProvider(
           create: (context) => RegisterCubit(),
         ),BlocProvider(

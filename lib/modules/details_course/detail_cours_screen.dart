@@ -1,6 +1,7 @@
 import 'package:aljosur_center/constance/component.dart';
 import 'package:aljosur_center/model/add_course_model.dart';
 import 'package:aljosur_center/modules/book_course/book_course_screen.dart';
+import 'package:aljosur_center/shared/cubit_app/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -13,6 +14,18 @@ class DetailCourseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool  youBookAlready= false;
+
+    for (int i = 0;
+    i <= AppCubit.get(context).myBookCoursesModel.length - 1;
+    i++) {
+      if (id == AppCubit.get(context).myBookCoursesModel[i].uIdCourse) {
+
+        youBookAlready=true;
+        break;
+      }
+
+    }
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -75,7 +88,7 @@ class DetailCourseScreen extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.orange[50],
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: Padding(
@@ -88,10 +101,6 @@ class DetailCourseScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 10.0,
-                ),
-                Divider(
-                  color: Colors.black54,
-                  height: 1,
                 ),
                 Text(
                   'عدد الجلسات',
@@ -106,7 +115,7 @@ class DetailCourseScreen extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.orange[50],
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: Padding(
@@ -119,10 +128,6 @@ class DetailCourseScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 10.0,
-                ),
-                Divider(
-                  color: Colors.black54,
-                  height: 1,
                 ),
                 Text(
                   'عدد الساعات',
@@ -137,7 +142,7 @@ class DetailCourseScreen extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.orange[50],
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: Padding(
@@ -150,10 +155,6 @@ class DetailCourseScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 10.0,
-                ),
-                Divider(
-                  color: Colors.black54,
-                  height: 1,
                 ),
                 Text(
                   'تاريخ البدء',
@@ -168,7 +169,7 @@ class DetailCourseScreen extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.orange[50],
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: Padding(
@@ -181,10 +182,6 @@ class DetailCourseScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 10.0,
-                ),
-                Divider(
-                  color: Colors.black54,
-                  height: 1,
                 ),
                 Text(
                   'سعر الدورة',
@@ -199,7 +196,7 @@ class DetailCourseScreen extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.orange[50],
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: Padding(
@@ -213,10 +210,6 @@ class DetailCourseScreen extends StatelessWidget {
                 SizedBox(
                   height: 10.0,
                 ),
-                Divider(
-                  color: Colors.black54,
-                  height: 1,
-                ),
                 SizedBox(
                   height: 50.0,
                 ),
@@ -229,7 +222,19 @@ class DetailCourseScreen extends StatelessWidget {
           height: 50.0,
           color: HexColor('#050640'),
           onPressed: () {
-            PushToNextScreen(context, BookCourseScreen( idCourse: id.toString(),nameCourse: model.nameCourse.toString(),));
+            if(!youBookAlready) {
+              PushToNextScreen(
+                  context,
+                  BookCourseScreen(
+                    imageCourse: model.image.toString(),
+                    nameCourse: model.nameCourse.toString(),
+                    uIdCourse: id,
+                  ),);
+            }else
+            {
+              showToastSuccess(
+                  'لقد قمت باللإشتراك بالفعل الرجاء انتظار الموافقة');
+            }
           },
           widget: Text(
             'اشتراك',

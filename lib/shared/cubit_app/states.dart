@@ -26,4 +26,22 @@ class AppCubitPaymentUploadImageSuccessState extends AppStates{}
 
 class AppCubitPaymentUploadImageErrorState extends AppStates{}
 
+class AppCubitBookCourseLoadingState extends AppStates{}
+
+class AppCubitBookCourseSuccessState extends AppStates{}
+
+class AppCubitBookCourseErrorState extends AppStates{}
+
+class AppCubitGetMyBookCourseLoadingState extends AppStates{}
+
+class AppCubitGetMyBookCourseSuccessState extends AppStates{}
+
+class AppCubitGetMyBookCourseErrorState extends AppStates{}
+
+class AppCubitGetMyCourseDetailsLoadingState extends AppStates{}
+
+class AppCubitGetMyCourseDetailsSuccessState extends AppStates{}
+
+class AppCubitGetMyCourseDetailsErrorState extends AppStates{}
+
 

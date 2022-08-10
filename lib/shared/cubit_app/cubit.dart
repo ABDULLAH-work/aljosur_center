@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aljosur_center/constance/component.dart';
 import 'package:aljosur_center/constance/constants.dart';
 import 'package:aljosur_center/model/add_course_model.dart';
+import 'package:aljosur_center/model/book_course_model.dart';
 import 'package:aljosur_center/model/user_model.dart';
 import 'package:aljosur_center/modules/authentication/login/login_screen.dart';
 import 'package:aljosur_center/modules/home/home_screen.dart';
@@ -54,7 +55,7 @@ class AppCubit extends Cubit<AppStates> {
    List<AddCourseModel> coursesModel = [];
    List<String> idCoursesModel = [];
 
-   void getcourseData() {
+   void getCourseData() {
       emit(AppCubitGetCourseLoadingState());
       FirebaseFirestore.instance
           .collection('Courses')
@@ -94,14 +95,14 @@ class AppCubit extends Cubit<AppStates> {
    }
 
 
-   File? PaymentImage;
+   File? paymentImage;
 
    final picker = ImagePicker();
 
    Future getPaymentImage() async {
       final pikedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pikedFile != null) {
-         PaymentImage = File(pikedFile.path);
+         paymentImage = File(pikedFile.path);
          emit(AppCubitPaymentImagePickedSuccessState());
       } else {
          print('No image selected');
@@ -115,9 +116,9 @@ class AppCubit extends Cubit<AppStates> {
       firebase_storage.FirebaseStorage.instance
           .ref()
           .child(
-         'Payments/${Uri.file(PaymentImage!.path).pathSegments.last}',
+         'Payments/${Uri.file(paymentImage!.path).pathSegments.last}',
       )
-          .putFile(PaymentImage!)
+          .putFile(paymentImage!)
           .then((value) {
          value.ref.getDownloadURL().then((value) {
             PaymentImageUrl = value;
@@ -135,5 +136,78 @@ class AppCubit extends Cubit<AppStates> {
    }
 
 
+   void bookCourse({
+      required String nameCourse,
+      required String imageCourse,
+      required String image,
+      required String uIdUser,
+      required String nameUser,
+      required String uIdCourse,
+   }) {
+      emit(AppCubitBookCourseLoadingState());
+      BookCourseModel model = BookCourseModel(
+         nameCourse:nameCourse,
+         nameUser:nameUser ,
+         imageCourse: imageCourse,
+         uIdUser:uIdUser ,
+         image:image ,
+         state: '0',
+         uIdCourse: uIdCourse,
+
+
+      );
+      FirebaseFirestore.instance
+          .collection('Booking')
+          .add(model.toMap())
+          .then(
+             (value) {
+            emit(AppCubitBookCourseSuccessState());
+         },
+      ).catchError(
+             (error) {
+            emit(AppCubitBookCourseErrorState());
+         },
+      );
+   }
+
+   List<BookCourseModel> myBookCoursesModel = [];
+
+   void getMyBookCourseData() {
+      emit(AppCubitGetMyBookCourseLoadingState());
+      FirebaseFirestore.instance
+          .collection('Booking').where('uIdUser', isEqualTo: uId)
+          .get()
+          .then((value) {
+         value.docs.forEach((element) {
+            myBookCoursesModel .add(BookCourseModel.fromJson(element.data()));
+         });
+         emit(AppCubitGetMyBookCourseSuccessState());
+      }).catchError(
+             (error) {
+            print(error.toString());
+            emit(AppCubitGetMyBookCourseErrorState());
+         },
+      );
+   }
+
+
+   AddCourseModel myCourseDetailsModel = AddCourseModel();
+
+   void getMyCourseDetailsData(idCourse)
+   {
+      emit(AppCubitGetMyCourseDetailsLoadingState());
+      FirebaseFirestore.instance
+          .collection('Courses').doc(idCourse)
+          .get()
+          .then((value) {
+         myCourseDetailsModel=AddCourseModel.fromJson(value.data()!);
+         emit(AppCubitGetMyCourseDetailsSuccessState());
+      }).catchError(
+             (error) {
+            print(error.toString());
+            emit(AppCubitGetMyCourseDetailsErrorState());
+         },
+      );
+   }
 
 }
